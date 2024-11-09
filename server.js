@@ -1,6 +1,7 @@
 var express = require('express');
 var socket = require('socket.io');
-var { registrarUsuario } = require('./registro');
+const mysql = require('mysql');
+var sql = require('./db.js');
 var app = express();
 var server = app.listen(4000, function(){
     console.log('Connecting to Port 4000');

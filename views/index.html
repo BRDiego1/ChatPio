@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PioChat</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f7f7f7;
+    }
+
+    /* Contenedor principal de la app */
+    .app-container {
+        display: flex;
+        height: 100vh;
+    }
+
+    /* Barra lateral */
+    .sidebar {
+        width: 30%;
+        background-color: #fff;
+        border-right: 1px solid #ccc;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header-sidebar {
+        padding: 10px;
+        background-color: #0078d4;
+        color: white;
+        text-align: center;
+    }
+
+    .header-sidebar button {
+        background-color: #ffffff;
+        color: #0078d4;
+        border: none;
+        padding: 10px;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .header-sidebar button:hover {
+        background-color: #808080;
+    }
+
+    /* Modificación para el botón "Cerrar sesión" */
+    .header-sidebar button.btn-cerrar-sesion {
+        background-color: #ff4d4d; /* Rojo claro */
+        color: white;
+    }
+
+    .header-sidebar button.btn-cerrar-sesion:hover {
+        background-color: #ff1a1a; /* Rojo más intenso al pasar el ratón */
+    }
+
+    .chats {
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    .chat {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        cursor: pointer;
+    }
+
+    .chat:hover {
+        background-color: #f0f0f0;
+    }
+
+    .avatar {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    .chat-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-name {
+        font-weight: bold;
+    }
+
+    /* Ventana de chat */
+    .chat-window {
+        width: 70%;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        padding: 18px;
+        background-color: #0078d4;
+        color: white;
+        text-align: center;
+    }
+
+    .chat-body {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    .chat-footer {
+        padding: 10px;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .input-message {
+        width: 80%;
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid #ddd;
+    }
+
+    .btn-send {
+        padding: 10px 15px;
+        background-color: #0078d4;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .btn-send:hover {
+        background-color: #005bb5;
+    }
+    </style>
+    <div class="app-container">
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <div class="header-sidebar">
+                <button class="btn-crear-grupo">Crear grupo</button>
+                <button class="btn-cerrar-sesion">Cerrar sesión</button>
+            </div>
+            <div class="chats">
+                <!-- Más chats pueden ser agregados aquí -->
+            </div>
+        </div>
+        <!-- Ventana de chat -->
+        <div class="chat-window">
+            <div class="chat-header">
+                <h2>aqui va el nick del usuario que seleccionó el logueado</h2>
+            </div>
+            <div class="chat-body">
+                <!-- Aquí van los mensajes -->
+            </div>
+            <div class="chat-footer">
+                <input type="text" placeholder="Escribe un mensaje..." class="input-message">
+                <button class="btn-send">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
