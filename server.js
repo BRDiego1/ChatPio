@@ -1,6 +1,7 @@
 const express = require('express');
 const WebSocket = require('ws');
 
+
 // Crear una instancia de Express
 const app = express();
 
