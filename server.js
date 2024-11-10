@@ -1,6 +1,7 @@
 var express = require('express');
 var socket = require('socket.io');
 var { registrarUsuario } = require('./registro'); // Importar la función de registro
+var { iniciarSesion } = require('./login'); // Importar la función de login
 var app = express();
 
 // Configuración del servidor
@@ -15,6 +16,18 @@ app.use(express.static('public'));
 // Ruta para el Login
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/views/login.html');
+});
+
+// Ruta para procesar el inicio de sesión (POST)
+app.post('/login', async function(req, res) {
+    const { username, password } = req.body;
+
+    try {
+        const message = await iniciarSesion(username, password);
+        res.status(200).json({ success: true, message });
+    } catch (error) {
+        res.status(401).json({ success: false, message: error });
+    }
 });
 
 // Ruta para mostrar el formulario de Registro
