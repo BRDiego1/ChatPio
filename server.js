@@ -3,9 +3,6 @@ var socket = require('socket.io');
 var sql = require('./db.js');
 var app = express();
 
-app.use(express.json()); // Para manejar JSON en las solicitudes
-app.use(express.urlencoded({ extended: true })); // Para manejar datos de formulario
-
 // Configuración del servidor
 var server = app.listen(4000, function() {
     console.log('Connecting to Port 4000');
@@ -32,7 +29,7 @@ app.get('/index', function(req, res) {
 var io = socket(server);
 
 io.on('connection', function(socket) {
-    console.log("Hay una conexion", socket.id);
+    console.log("Usuario Conectado", socket.id);
 
     socket.on('chat', function(data) {
         console.log(data);

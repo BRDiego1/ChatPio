@@ -172,6 +172,12 @@
             </div>
         </div>
     </div>
-
+        <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Establecer la conexión con el servidor
+        var socket = io();
+        // Emitir un evento personalizado al servidor cuando la página se cargue
+        socket.emit('userConnected', { message: 'Un usuario ha accedido al index.html' });
+    </script>
 </body>
 </html>
