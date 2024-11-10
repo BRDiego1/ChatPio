@@ -1,6 +1,6 @@
 var express = require('express');
 var socket = require('socket.io');
-var sql = require('./db.js');
+var { registrarUsuario } = require('./registro'); // Importar la función de registro
 var app = express();
 
 // Configuración del servidor
@@ -8,17 +8,30 @@ var server = app.listen(4000, function() {
     console.log('Connecting to Port 4000');
 });
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-app.set('view engine', 'html'); // Usar HTML en las vistas
 
 // Ruta para el Login
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/views/login.html');
 });
 
-// Ruta para el Registro (GET para mostrar la página)
+// Ruta para mostrar el formulario de Registro
 app.get('/registro', function(req, res) {
     res.sendFile(__dirname + '/views/registro.html');
+});
+
+// Ruta para procesar el registro de usuario (POST)
+app.post('/registro', async function(req, res) {
+    const { username, email, password } = req.body;
+
+    try {
+        const message = await registrarUsuario(username, email, password);
+        res.status(201).json({ success: true, message });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error });
+    }
 });
 
 // Ruta para la página principal (Index)
