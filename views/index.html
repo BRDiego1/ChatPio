@@ -4,180 +4,236 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PioChat</title>
-    <link rel="stylesheet" href="./index.css">
+    <style>
+        /* Reset de algunos márgenes y estilos por defecto */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            width: 90%;
+            height: 80%;
+            max-width: 1200px;
+            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: #fff;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Barra lateral */
+        .sidebar {
+            width: 270px;
+            background-color: #1f2a44;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 3px solid #3a4b77;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar:hover {
+            width: 280px;
+        }
+
+        .header-sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .btn-crear-grupo,
+        .btn-cerrar-sesion {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-crear-grupo:hover,
+        .btn-cerrar-sesion:hover {
+            background-color: #45a049;
+        }
+
+        .chats {
+            margin-top: 20px;
+            overflow-y: auto;
+        }
+
+        /* Ventana de chat */
+        .chat-window {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+        }
+
+        .chat-header {
+            background-color: #1f2a44;
+            color: white;
+            padding: 18px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 2px solid #f1f1f1;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            background-color: #e4e6eb;
+            color: #333;
+            font-size: 14px;
+            word-wrap: break-word;
+        }
+
+        .message.sent {
+            background-color: #4CAF50;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .message.received {
+            background-color: #f1f1f1;
+            color: #333;
+            align-self: flex-start;
+        }
+
+        .chat-footer {
+            padding: 18px;
+            background-color: #fff;
+            border-top: 2px solid #f1f1f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .input-message {
+            flex-grow: 1;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            background-color: #fafafa;
+            color: #333;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .input-message:focus {
+            border-color: #4CAF50;
+        }
+
+        .btn-send {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 20px;
+        }
+
+        .btn-send:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilo para el nombre de usuario */
+        #username {
+            font-weight: bold;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .message {
+            animation: fadeIn 0.5s ease-in;
+        }
+    </style>
 </head>
 <body>
-    <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
 
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f7f7f7;
-    }
-
-    /* Contenedor principal de la app */
-    .app-container {
-        display: flex;
-        height: 100vh;
-    }
-
-    /* Barra lateral */
-    .sidebar {
-        width: 30%;
-        background-color: #fff;
-        border-right: 1px solid #ccc;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .header-sidebar {
-        padding: 10px;
-        background-color: #0078d4;
-        color: white;
-        text-align: center;
-    }
-
-    .header-sidebar button {
-        background-color: #ffffff;
-        color: #0078d4;
-        border: none;
-        padding: 10px;
-        margin: 5px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .header-sidebar button:hover {
-        background-color: #808080;
-    }
-
-    /* Modificación para el botón "Cerrar sesión" */
-    .header-sidebar button.btn-cerrar-sesion {
-        background-color: #ff4d4d; /* Rojo claro */
-        color: white;
-    }
-
-    .header-sidebar button.btn-cerrar-sesion:hover {
-        background-color: #ff1a1a; /* Rojo más intenso al pasar el ratón */
-    }
-
-    .chats {
-        padding: 10px;
-        overflow-y: auto;
-    }
-
-    .chat {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        cursor: pointer;
-    }
-
-    .chat:hover {
-        background-color: #f0f0f0;
-    }
-
-    .avatar {
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        margin-right: 10px;
-    }
-
-    .chat-info {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .chat-name {
-        font-weight: bold;
-    }
-
-    /* Ventana de chat */
-    .chat-window {
-        width: 70%;
-        background-color: #fff;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .chat-header {
-        padding: 18px;
-        background-color: #0078d4;
-        color: white;
-        text-align: center;
-    }
-
-    .chat-body {
-        flex: 1;
-        padding: 10px;
-        overflow-y: auto;
-    }
-
-    .chat-footer {
-        padding: 10px;
-        background-color: #f0f0f0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .input-message {
-        width: 80%;
-        padding: 10px;
-        border-radius: 20px;
-        border: 1px solid #ddd;
-    }
-
-    .btn-send {
-        padding: 10px 15px;
-        background-color: #0078d4;
-        color: white;
-        border: none;
-        border-radius: 20px;
-        cursor: pointer;
-    }
-
-    .btn-send:hover {
-        background-color: #005bb5;
-    }
-    </style>
     <div class="app-container">
         <!-- Barra lateral -->
         <div class="sidebar">
             <div class="header-sidebar">
                 <button class="btn-crear-grupo">Crear grupo</button>
-                <button class="btn-cerrar-sesion">Cerrar sesión</button>
+                <button class="btn-cerrar-sesion" onclick="logout()">Cerrar sesión</button>
             </div>
             <div class="chats">
-                <!-- Más chats pueden ser agregados aquí -->
+                <!-- Los chats van aquí -->
             </div>
         </div>
+
         <!-- Ventana de chat -->
         <div class="chat-window">
             <div class="chat-header">
-                <h2>aqui va el nick del usuario que seleccionó el logueado</h2>
+                <h2></h2> <!-- Mostrar el nombre del usuario -->
             </div>
             <div class="chat-body">
-                <!-- Aquí van los mensajes -->
+                <!-- Mensajes -->
             </div>
             <div class="chat-footer">
                 <input type="text" placeholder="Escribe un mensaje..." class="input-message">
-                <button class="btn-send">Enviar</button>
+                <button class="btn-send">✉</button>
             </div>
         </div>
     </div>
-        <script src="/socket.io/socket.io.js"></script>
+
     <script>
-        // Establecer la conexión con el servidor
-        var socket = io();
-        // Emitir un evento personalizado al servidor cuando la página se cargue
-        socket.emit('userConnected', { message: 'Un usuario ha accedido al index.html' });
+        // Aquí deberías acceder al nombre de usuario almacenado en la sesión
+        document.getElementById("username").textContent = username;
+        
+        function logout() {
+            fetch('/logout', {
+                method: 'POST',
+            })
+            .then(() => {
+                window.location.href = '/'; // Redirige al login
+            });
+        }
     </script>
 </body>
 </html>

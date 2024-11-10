@@ -1,7 +1,8 @@
 var express = require('express');
 var socket = require('socket.io');
-var { registrarUsuario } = require('./registro'); // Importar la función de registro
-var { iniciarSesion } = require('./login'); // Importar la función de login
+var session = require('express-session'); // Importa el módulo para gestionar sesiones
+var { registrarUsuario } = require('./registro');
+var { iniciarSesion } = require('./login');
 var app = express();
 
 // Configuración del servidor
@@ -12,6 +13,13 @@ var server = app.listen(4000, function() {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+// Configuración de la sesión
+app.use(session({
+    secret: 'mi_clave_secreta', // Cambia esto por una clave secreta
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Ruta para el Login
 app.get('/', function(req, res) {
@@ -24,6 +32,10 @@ app.post('/login', async function(req, res) {
 
     try {
         const message = await iniciarSesion(username, password);
+
+        // Almacena el nombre de usuario en la sesión
+        req.session.username = username;
+
         res.status(200).json({ success: true, message });
     } catch (error) {
         res.status(401).json({ success: false, message: error });
@@ -49,8 +61,16 @@ app.post('/registro', async function(req, res) {
 
 // Ruta para la página principal (Index)
 app.get('/index', function(req, res) {
-    res.sendFile(__dirname + '/views/index.html');
+    // Verifica si el usuario está autenticado (si existe un nombre en la sesión)
+    if (req.session.username) {
+        res.sendFile(__dirname + '/views/index.html');
+    } else {
+        res.redirect('/'); // Si no está autenticado, redirige al login
+    }
 });
+
+
+
 
 var io = socket(server);
 
