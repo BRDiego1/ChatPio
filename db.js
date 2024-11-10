@@ -1,10 +1,13 @@
-const mysql = require('mysql');
+require('dotenv').config();
+
+// Cambia 'mysql' por 'mysql2'
+const mysql = require('mysql2');
 
 const db = mysql.createConnection({
-    host: 'localhost',     // Cambia esto a la IP de tu base de datos si es necesario
-    user: 'root',
-    password: '',
-    database: 'piochat'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 db.connect(function(err) {

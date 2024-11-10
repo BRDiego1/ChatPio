@@ -1,55 +1,36 @@
 var express = require('express');
 var socket = require('socket.io');
-var { registrarUsuario } = require('./registro'); // Importar la función de registro
-var { iniciarSesion } = require('./login'); // Importar la función de login
-var app = express();
+var sql = require('./db.js');
+const bodyParser = require('body-parser');
+var app = express(); // Solo se declara una vez
+require('dotenv').config();
 
-// Configuración del servidor
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+
 var server = app.listen(4000, function() {
     console.log('Connecting to Port 4000');
 });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.set('view engine', 'html');
 
-// Ruta para el Login
+const LoginRoutes = require('./public/M_par/Route/Ro_Login.js');
+const RegistroRoutes = require('./public/M_par/Route/R_Registro.js');
+
+app.use(LoginRoutes);
+app.use(RegistroRoutes);
+
 app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/views/login.html');
+    res.sendFile(__dirname + '/public/login.html');
 });
 
-// Ruta para procesar el inicio de sesión (POST)
-app.post('/login', async function(req, res) {
-    const { username, password } = req.body;
-
-    try {
-        const message = await iniciarSesion(username, password);
-        res.status(200).json({ success: true, message });
-    } catch (error) {
-        res.status(401).json({ success: false, message: error });
-    }
-});
-
-// Ruta para mostrar el formulario de Registro
 app.get('/registro', function(req, res) {
-    res.sendFile(__dirname + '/views/registro.html');
+    res.sendFile(__dirname + '/public/registro.html');
 });
 
-// Ruta para procesar el registro de usuario (POST)
-app.post('/registro', async function(req, res) {
-    const { username, email, password } = req.body;
-
-    try {
-        const message = await registrarUsuario(username, email, password);
-        res.status(201).json({ success: true, message });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error });
-    }
-});
-
-// Ruta para la página principal (Index)
 app.get('/index', function(req, res) {
-    res.sendFile(__dirname + '/views/index.html');
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 var io = socket(server);
